@@ -24,13 +24,13 @@ class SpellBeeGameProcessor(FrameProcessor):
 
         if isinstance(frame, TranscriptionFrame):
             user_input = frame.text.strip()
-            print("🎤 USER SAID:", user_input)
+            print("USER SAID:", user_input)
 
             if not user_input:
                 return
 
             response = self.manage_spelling(user_input)
-            print("🧠 BOT RESPONDS:", response)
+            print("BOT RESPONDS:", response)
 
             await self.push_frame(TextFrame(response), direction)
             return
@@ -41,13 +41,17 @@ class SpellBeeGameProcessor(FrameProcessor):
         await self.push_frame(frame, direction)
 
     def manage_spelling(self, user_input: str):
-        correct_word = self.game_state.current_word.lower()
-        normalized_input = normalize(user_input)
+        if not self.game_state.current_word:
+            word = self.game_state.next_word()
+            return f"Welcome to Spell Bee! ... Your first word is: {word}"
 
         if "repeat" in user_input.lower():
             return f"The word is: {self.game_state.current_word}"
 
-        if normalized_input == correct_word or user_input.lower() == correct_word:
+        normalized_input = normalize(user_input)
+        is_correct = self.game_state.check_spelling(normalized_input)
+
+        if is_correct:
             next_word = self.game_state.next_word()
             return f"Correct! ... Next word is: {next_word}"
 
@@ -55,4 +59,3 @@ class SpellBeeGameProcessor(FrameProcessor):
             word_asked = self.game_state.current_word
             next_word = self.game_state.next_word()
             return f"Wrong. The correct spelling is {word_asked}. ... Next word is: {next_word}"
-

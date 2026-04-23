@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Spell Bee Bot (frontend)
 
-## Getting Started
+Next.js UI: join a Daily room, start a session against the backend, and show live score/rounds via WebSocket.
 
-First, run the development server:
+## Requirements
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 18+ (20+ recommended)
+- npm (or pnpm/yarn if you adapt commands)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. From this directory:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+2. Optional: create `.env.local` if defaults are wrong for your machine:
 
-To learn more about Next.js, take a look at the following resources:
+   | Variable | Purpose |
+   |----------|---------|
+   | `NEXT_PUBLIC_DAILY_ROOM_URL` | Daily room the player joins (must match backend bot room) |
+   | `NEXT_PUBLIC_API_WS` | WebSocket origin for stats, e.g. `ws://localhost:8000` (no trailing slash). Defaults to `ws://localhost:8000` |
+   | `NEXT_PUBLIC_GAME_STATS_WS_URL` | Full stats WebSocket URL; overrides the URL built from `NEXT_PUBLIC_API_WS` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   The app calls the HTTP API at `http://localhost:8000/api` by default. To change that, edit `API_BASE` in `app/page.tsx` or add a `NEXT_PUBLIC_*` variable and wire it in code.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Start the dev server:
 
-## Deploy on Vercel
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   Open [http://localhost:3000](http://localhost:3000).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Run order
+
+1. Start the **backend** (see `backend/README.md`).
+2. Start this frontend.
+3. Click **Start Game** so the backend spawns the bot and you join the Daily room.
+
+## Production
+
+Use `npm run build` then `npm run start`. Use `wss://` for `NEXT_PUBLIC_API_WS` (or the full stats URL) when the site is served over HTTPS.
