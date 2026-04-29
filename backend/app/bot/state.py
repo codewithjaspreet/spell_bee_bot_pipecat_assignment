@@ -33,13 +33,14 @@ class SpellBeeGameState:
 
         self.current_word = WORDS[self.index]
         self.index += 1
-        self.rounds += 1
         self._push_stats()
         return self.current_word
 
     def check_spelling(self, input_word: str):
         if not self.current_word:
             return False
+
+        self.rounds += 1
 
         clean_input = input_word.strip().replace(" ", "").lower()
         correct = self.current_word.replace(" ", "").lower()
@@ -49,6 +50,7 @@ class SpellBeeGameState:
             self._push_stats()
             return True
 
+        self._push_stats()
         return False
 
     def get_stats(self):
