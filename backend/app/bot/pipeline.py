@@ -49,7 +49,7 @@ async def create_spellbee_pipeline():
     vad_analyzer = SileroVADAnalyzer(
         params=VADParams(
             start_secs=0.2,
-            stop_secs=0.8,
+            stop_secs=0.2,
         )
     )
     vad_processor = VADProcessor(vad_analyzer=vad_analyzer)
